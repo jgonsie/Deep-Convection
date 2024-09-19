@@ -1,0 +1,3 @@
+pimpleFoamSMfinal.C
+
+EXE = $(FOAM_APPBIN)/pimpleFoamSMfinal

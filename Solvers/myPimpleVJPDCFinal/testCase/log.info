@@ -1,0 +1,113 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2112                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : plus OPENFOAM=2112 version=plus
+Arch   : "LSB;label=64;scalar=64"
+AD Tool: "AD v1.0"
+Exec   : pimpleJacobianVectorDemonstrator
+Date   : Jun 08 2023
+Time   : 13:06:09
+Host   : MSI-LEOPARD
+PID    : 30910
+I/O    : uncollated
+Case   : /home/jesusglezs97/pimpleJacobianVectorDemonstrator/testCase
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2112                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : plus OPENFOAM=2112 version=plus
+Arch   : "LSB;label=64;scalar=64"
+AD Tool: "AD v1.0"
+Exec   : pimpleJacobianVectorDemonstrator
+Date   : Jun 08 2023
+Time   : 13:07:41
+Host   : MSI-LEOPARD
+PID    : 31144
+I/O    : uncollated
+Case   : /home/jesusglezs97/pimpleJacobianVectorDemonstrator/testCase
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+
+PIMPLE: Operating solver in PISO mode
+
+Reading field p
+
+Reading field U
+
+Reading Ufaces
+
+Reading/calculating face flux field phi
+
+Selecting incompressible transport model Newtonian
+Selecting turbulence model type RAS
+Selecting RAS turbulence model kOmegaSST
+Selecting patchDistMethod meshWave
+RAS
+{
+    RASModel        kOmegaSST;
+    turbulence      on;
+    printCoeffs     on;
+    alphaK1         0.85;
+    alphaK2         1;
+    alphaOmega1     0.5;
+    alphaOmega2     0.856;
+    gamma1          0.555556;
+    gamma2          0.44;
+    beta1           0.075;
+    beta2           0.0828;
+    betaStar        0.09;
+    a1              0.31;
+    b1              1;
+    c1              10;
+    F3              false;
+    decayControl    false;
+    kInf            0;
+    omegaInf        0;
+}
+
+No MRF models present
+
+No finite volume options present
+Courant Number mean: 0.318108 max: 0.32
+Creating Tape, size: 4096
+Courant Number mean: 0.318108 max: 0.32
+PIMPLE: iteration 1
+fvcDic.C-->surfaceIntegrate 
+smoothSolver:  Solving for Ux, Initial residual = 1, Final residual = 1.79562e-07, No Iterations 5
+smoothSolver:  Solving for Uy, Initial residual = 1, Final residual = 2.78858e-07, No Iterations 5
+GAMG:  Solving for p, Initial residual = 1, Final residual = 3.33476e-07, No Iterations 11
+time step continuity errors : sum local = 6.9194e-10, global = -2.07779e-10, cumulative = -2.07779e-10
+smoothSolver:  Solving for omega, Initial residual = 0.0122164, Final residual = 6.25243e-07, No Iterations 3
+smoothSolver:  Solving for k, Initial residual = 1, Final residual = 1.92426e-07, No Iterations 6
+skipping k because zero incoming adjoints
+skipping omega because zero incoming adjoints
+GAMG:  Solving for pReverse, Initial residual = 1, Final residual = 0.0296467, No Iterations 2
+smoothSolver:  Solving for UyReverse, Initial residual = 1, Final residual = 0.0552196, No Iterations 1
+smoothSolver:  Solving for UxReverse, Initial residual = 1, Final residual = 0.0545152, No Iterations 1
+End
+

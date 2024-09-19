@@ -1,0 +1,9 @@
+#Compile OFcaller
+$gcc -shared -fopenmp -o libOFcaller.so OFcaller.c
+
+#Check active memory segments (shared memory)
+$ipcs -m
+
+#Clean active memory segments
+$cd shared_memory
+$./shmcleaner

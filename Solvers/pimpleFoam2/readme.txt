@@ -1,0 +1,1 @@
+This is the original version of pimpleFOAM. The one that contains Markus' repository does not compile.

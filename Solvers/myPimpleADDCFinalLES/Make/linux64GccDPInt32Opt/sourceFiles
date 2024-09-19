@@ -1,0 +1,4 @@
+SOURCE = \
+myCustomPimpleSMv2.C \
+
+# sources
