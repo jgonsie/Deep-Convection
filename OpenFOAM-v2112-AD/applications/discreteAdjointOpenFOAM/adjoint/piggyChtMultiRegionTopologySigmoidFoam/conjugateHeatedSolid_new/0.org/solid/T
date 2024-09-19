@@ -1,0 +1,50 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  dev                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0/solid";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 323.5;
+
+boundaryField
+{
+    solid_to_fluid
+    {
+        type            compressible::turbulentTemperatureCoupledBaffleMixed;
+        value           uniform 323.5;
+        kappaMethod     solidThermo;
+        Tnbr            T;
+    }
+    /*solid_walls
+    {
+        type            zeroGradient;
+        value           uniform 398.5; //[K]
+    }*/
+    solid_walls
+    {
+        type            uniformFixedValue;
+        uniformValue
+        {
+            type        expression;
+
+            // arg() and time() can be used synonymous here
+            expression  #{ pos().x() >= 0.5 && pos().x() <= 1 ? 400 : 323.5 #};
+        }
+    }
+}
+
+
+// ************************************************************************* //

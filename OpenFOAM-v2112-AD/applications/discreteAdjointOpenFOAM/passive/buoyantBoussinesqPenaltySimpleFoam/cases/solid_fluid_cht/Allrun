@@ -1,0 +1,23 @@
+#!/bin/bash
+
+wmake $FOAM_UTILITIES/mesh/generation/blockMesh
+wmake $FOAM_UTILITIES/mesh/manipulation/splitMeshRegions
+wmake $FOAM_UTILITIES/mesh/manipulation/topoSet
+wmake $FOAM_SOLVERS/heatTransfer/chtMultiRegionFoam/chtMultiRegionSimpleFoam
+
+blockMesh | tee blockMesh.log
+
+rm -rf 0
+cp -r 0.org 0
+
+splitMeshRegions -cellZonesOnly -overwrite
+rm -rf constant/polyMesh
+
+chtMultiRegionSimpleFoam
+
+postProcess -region fluid -latestTime -func sample
+postProcess -region solid -latestTime -func sample
+
+touch foam.foam
+
+#------------------------------------------------------------------------------

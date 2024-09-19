@@ -1,0 +1,15 @@
+revolve.C
+CheckInterface.C
+CheckDatabase.C
+CheckDict.C
+CheckMethod.C
+CheckRevolve.C
+CheckEquidistant.C
+CheckNone.C
+CheckDebug.C
+CheckDummy.C
+CheckReverseAcc.C
+CheckPiggyback.C
+CheckController.H
+
+LIB = $(FOAM_USER_LIBBIN)/libCheckpointingLambda

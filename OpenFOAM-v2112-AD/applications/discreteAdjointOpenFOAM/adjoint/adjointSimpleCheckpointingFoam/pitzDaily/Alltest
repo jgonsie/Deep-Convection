@@ -1,0 +1,22 @@
+#!/bin/bash
+# rudimentary test script, needs error checking
+
+echo "##############################################################################################"
+echo "#                                                                                            #"
+echo "# applications/discreteAdjointOpenFOAM/adjoint/adjointSimpleCheckpoingingFoam/pitzDaily      #"
+echo "#                                                                                            #"
+echo "##############################################################################################"
+
+./Allclean > /dev/null
+echo "blockMesh" && blockMesh > blockMesh.log 2>&1
+rm -f 0
+cp -r 0.org 0
+echo "potentialFoam" && potentialFoam -writePhi > potentialFoam.log
+echo "adjointSimpleCheckpointingFoam" && adjointSimpleCheckpointingFoam > adjointSimpleCheckpointingFoam.log
+
+grep "Avg_Tape_Mem" adjointSimpleCheckpointingFoam.log
+grep "ExecutionTime" adjointSimpleCheckpointingFoam.log | tail -n 1
+
+exit 0
+
+#------------------------------------------------------------------------------

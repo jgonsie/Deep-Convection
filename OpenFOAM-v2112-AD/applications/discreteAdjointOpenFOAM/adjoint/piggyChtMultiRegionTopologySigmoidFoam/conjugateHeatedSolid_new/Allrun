@@ -1,0 +1,29 @@
+#!/bin/bash
+
+wmake $FOAM_UTILITIES/mesh/generation/blockMesh
+wmake $FOAM_UTILITIES/mesh/manipulation/splitMeshRegions
+wmake $FOAM_UTILITIES/mesh/manipulation/topoSet
+wmake $FOAM_SOLVERS/heatTransfer/chtMultiRegionFoam/chtMultiRegionSimpleFoam
+
+blockMesh | tee blockMesh.log
+
+rm -rf 0
+cp -r 0.org 0
+
+foamDictionary -entry startTime -set 0   system/controlDict
+foamDictionary -entry endTime   -set 500 system/controlDict
+
+splitMeshRegions -cellZonesOnly -overwrite
+rm -rf constant/polyMesh
+
+chtMultiRegionSimpleFoam
+
+foamDictionary -entry startTime -set 500  system/controlDict
+foamDictionary -entry endTime   -set 1500 system/controlDict
+topoSet -region fluid
+
+piggyChtMultiRegionTopologySigmoidFoam
+
+touch foam.foam
+
+#------------------------------------------------------------------------------

@@ -1,0 +1,31 @@
+digraph finite_state_machine {
+    {rank = min; U_in p_in phi_in}
+    {rank = max; U_out p_out phi_out}
+
+    UEqn     [xlabel="tape_1"]
+    fullUEqn [xlabel="tape_2"]
+    U1       [xlabel="tape_3"]
+    rAU      [xlabel="tape_4"]
+    HbyA     [xlabel="tape_5"]
+    phiHbyA  [xlabel="tape_6"]
+    pEqn     [xlabel="tape_7"]
+    p1       [xlabel="tape_8"]
+    phi1     [xlabel="tape_9"]
+    U2       [xlabel="tape_10"]
+    
+    // fvVectorMatrix Ueqn
+    U_in -> UEqn phi_in -> UEqn
+    UEqn -> fullUEqn p_in -> fullUEqn
+    fullUEqn -> U1
+    UEqn -> rAU
+    rAU -> HbyA UEqn -> HbyA U1 -> HbyA p_in -> HbyA
+    HbyA -> phiHbyA U1 -> phiHbyA p_in -> phiHbyA
+    //U1 -> p1 phiHbyA -> p1 rAU -> p1
+    rAU -> pEqn U1 -> pEqn phiHbyA -> pEqn
+    pEqn -> p1
+    phiHbyA -> phi1 pEqn -> phi1
+    HbyA -> U2 rAU -> U2 p1 -> U2
+    U2 -> U_out
+    p1 -> p_out
+    phi1 -> phi_out
+}

@@ -1,0 +1,4 @@
+penaltyHeRhoThermo/makeThermos.C
+buoyantPenaltySimpleFoam.C
+
+EXE = $(FOAM_USER_APPBIN)/buoyantPenaltySimpleFoam

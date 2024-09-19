@@ -1,0 +1,110 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+fTol 1e-8;
+rTol 1e-8;
+SDLS yes;
+
+SIMPLE
+{
+    nNonOrthogonalCorrectors 0;
+    consistent      yes;
+    costFunctionPatches (inlet);
+    costFunction "pressureLoss";
+    derivPoint (5.0 0.5 0.05);
+    seedAllCells no;
+    tapeSizeMB   4098;
+    /*residualControl
+    {
+        p               1e-4;
+        U               1e-4;
+        "(k|epsilon|omega)" 1e-4;
+    }*/
+}
+
+potentialFlow
+{
+    nNonOrthogonalCorrectors 2;
+}
+
+solvers
+{
+    "(p|Phi)"
+    {
+        solver          GAMG;
+        smoother        GaussSeidel;
+        tolerance       $fTol;
+        preconditioner  DIC;
+        relTol          0.0;
+        smoother        DIC;
+        nPreSweeps      0;
+        nPostSweeps     2;
+        cacheAgglomeration on;
+        agglomerator    faceAreaPair;
+        nCellsInCoarsestLevel 6;
+        mergeLevels     1;
+        minIter 5;
+        SDLS $SDLS;
+    }
+    pReverse
+    {
+        solver          GAMG;
+        smoother        symGaussSeidel;
+        tolerance       $rTol;
+        preconditioner  DIC;
+        relTol          0.0;
+        smoother        DIC;
+        nPreSweeps      0;
+        nPostSweeps     2;
+        cacheAgglomeration on;
+        agglomerator    faceAreaPair;
+        nCellsInCoarsestLevel 6;
+        mergeLevels     1;
+        minIter 5;
+    }
+
+    U
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       $fTol;
+        relTol          0;
+        minIter 5;
+        SDLS            $SDLS;
+    }
+    UReverse
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       $rTol;
+        relTol          0;
+        minIter 5;
+    }
+}
+
+relaxationFactors
+{
+    equations
+    {
+        U               0.8; // 0.9 is more stable but 0.95 more convergent
+        ".*"            0.8; // 0.9 is more stable but 0.95 more convergent
+    }
+}
+
+
+
+// ************************************************************************* //

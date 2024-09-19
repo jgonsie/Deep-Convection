@@ -1,0 +1,14 @@
+#!/bin/bash
+
+MESH_LVL=20
+
+m4 -P -Dlvl=$MESH_LVL  system/blockMeshDict.m4 > system/blockMeshDict
+blockMesh | tee blockMesh.log
+rm -f 0
+cp -r 0.org 0
+potentialFoam -writePhi | tee potentialFoam.log
+adjointSimpleCheckpointingFoam | tee adjointSimpleCheckpointingFoam.log
+
+touch foam.foam
+
+#------------------------------------------------------------------------------

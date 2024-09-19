@@ -1,0 +1,125 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1906                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale   1;
+
+//- Radius of pipe [m]
+rI 0.2;
+rO 0.5;
+
+minZ 0.0;
+maxZ 0.1;
+
+vertices
+(
+    (#eval{-1.0*$rO} 0.0 $minZ)
+    (#eval{-1.0*$rI} 0.0 $minZ)
+    (0.0 #eval{1.0*$rI}  $minZ)
+    (0.0 #eval{1.0*$rO}  $minZ)
+
+    (#eval{-1.0*$rO} 0.0 $maxZ) // 4
+    (#eval{-1.0*$rI} 0.0 $maxZ)
+    (0.0 #eval{1.0*$rI}  $maxZ)
+    (0.0 #eval{1.0*$rO}  $maxZ)
+
+    (0.0 #eval{1.0*$rI} $minZ) // 8
+    (#eval{1.0*$rI} 0.0 $minZ)
+    (#eval{1.0*$rO} 0.0 $minZ)
+    (0.0 #eval{1.0*$rO} $minZ)
+
+    (0.0 #eval{1.0*$rI} $maxZ) // 12
+    (#eval{1.0*$rI} 0.0 $maxZ)
+    (#eval{1.0*$rO} 0.0 $maxZ)
+    (0.0 #eval{1.0*$rO} $maxZ)
+);
+
+grading ( (0.2 0.2 0.5) (0.4 0.8 1) (0.1 0.1 1) );
+
+blocks
+(
+    // inlet block
+    hex (0 1  2  3  4  5  6  7) (20 40 1) simpleGrading (1 1 1)
+    hex (8 9 10 11 12 13 14 15) (40 20 1) simpleGrading (1 1 1)
+);
+
+edges
+(
+    // inner arc
+    arc 1 2 (#eval{-$rI/sqrt(2)} #eval{$rI/sqrt(2)} $minZ)
+    arc 5 6 (#eval{-$rI/sqrt(2)} #eval{$rI/sqrt(2)} $maxZ)
+    // outer arc
+    arc 3 0 (#eval{-$rO/sqrt(2)} #eval{$rO/sqrt(2)} $minZ)
+    arc 7 4 (#eval{-$rO/sqrt(2)} #eval{$rO/sqrt(2)} $maxZ)
+
+    // inner arc
+    arc 8 9 (#eval{$rI/sqrt(2)} #eval{$rI/sqrt(2)} $minZ)
+    arc 12 13 (#eval{$rI/sqrt(2)} #eval{$rI/sqrt(2)} $maxZ)
+    // outer arc
+    arc 10 11 (#eval{$rO/sqrt(2)} #eval{$rO/sqrt(2)} $minZ)
+    arc 14 15 (#eval{$rO/sqrt(2)} #eval{$rO/sqrt(2)} $maxZ)
+);
+/*
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (0 4 7 3)
+        );
+    }
+
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (1 2 6 5)
+        );
+    }
+
+    side1
+    {
+        type symmetryPlane;
+        faces
+        (
+            (0 1 5 4)
+        );
+    }
+
+    side2
+    {
+        type symmetryPlane;
+        faces
+        (
+            (7 6 2 3)
+        );
+    }
+
+    walls
+    {
+        type wall;
+        faces
+        (
+            (4 5 6 7)
+            (3 2 1 0)
+        );
+    }
+);
+*/
+
+// ************************************************************************* //

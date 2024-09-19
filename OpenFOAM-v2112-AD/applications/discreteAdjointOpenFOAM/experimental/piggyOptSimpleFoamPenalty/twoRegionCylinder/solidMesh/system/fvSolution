@@ -1,0 +1,101 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  plus                                  |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+SDLS yes;
+
+solvers
+{
+
+    "(.*)"
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-05;
+        minIter         5;
+        relTol          0;
+        SDLS            $SDLS;
+    }
+
+    "(p|pReverse|pa|Phi)"
+    {
+        solver          GAMG;
+        tolerance       1e-06;
+        minIter         5;
+        relTol          0;
+        smoother        DIC;
+        SDLS            $SDLS;
+    }
+}
+
+SIMPLE
+{
+    adjointEps 1e-3;
+    V0 127.218; // volume constraint
+    pFactor 0.0;
+    nNonOrthogonalCorrectors 0;
+    consistent      yes;
+    costFunctionPatches (inlet);
+    sensOutputPatches (cylinder);
+    costFunction "pressureLoss";
+    frozenCorrection no;
+    frozenTurbulence no;
+    /*residualControl
+    {
+        p               1e-4;
+        U               1e-5;
+        "(k|epsilon|omega|f|v2)" 1e-4;
+    }*/
+
+}
+
+potentialFlow
+{
+    nNonOrthogonalCorrectors 3;
+}
+
+/*relaxationFactors
+{
+    fields
+    {
+        "(p|pa)"        0.3;
+        alpha           0.1;
+    }
+    equations
+    {
+        "(U|Ua)"        0.7;
+        "(k|epsilon)"   0.7;
+    }
+}*/
+
+
+relaxationFactors
+{
+    fields
+    {
+        alpha           1;
+    }
+
+    equations
+    {
+        U               0.8; // 0.9 is more stable but 0.95 more convergent
+        ".*"            0.8; // 0.9 is more stable but 0.95 more convergent
+        alpha           1;
+    }
+}
+
+
+// ************************************************************************* //

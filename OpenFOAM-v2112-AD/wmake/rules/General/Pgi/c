@@ -1,0 +1,10 @@
+SUFFIXES += .c
+
+cc          = pgcc$(COMPILER_VERSION)
+
+cARCH       =
+cDBUG       =
+cOPT        = -O2
+cWARN       = $(FOAM_EXTRA_CFLAGS)
+
+#------------------------------------------------------------------------------

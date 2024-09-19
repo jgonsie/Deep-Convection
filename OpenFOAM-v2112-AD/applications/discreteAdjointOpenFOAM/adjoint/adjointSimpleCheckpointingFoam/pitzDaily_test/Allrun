@@ -1,0 +1,12 @@
+#! /bin/bash
+
+# short runs to verify checkpointing against blackbox AD
+( cd pitzDaily_revolve_none        && ./Allrun )
+( cd pitzDaily_revolve_offline     && ./Allrun )
+( cd pitzDaily_equidistant_offline && ./Allrun )
+
+# TODO: long runs (fully converged) to verify piggyback and reverse accumulation
+
+# long runs to verify online checkpointing (convergence due to residualControl triggered)
+( cd pitzDaily_revolve_online      && ./Allrun )
+( cd pitzDaily_equidistant_online  && ./Allrun )

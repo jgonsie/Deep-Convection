@@ -1,0 +1,22 @@
+#! /bin/bash 
+
+#if [ "$DAOF_AD_MODE" = "A1S" ]; then
+#(
+#  echo "Running A1S tests with $DAOF_AD_TOOL"
+#  cd applications/discreteAdjointOpenFOAM/adjoint/adjointSimpleCheckpointingLambdaFoam/pitzDaily
+#  ./Alltest
+#)
+#elif [ "$DAOF_AD_MODE" = "Passive" ]; then
+#(
+#  echo "Running passive tests"
+#  cd applications/discreteAdjointOpenFOAM/adjoint/adjointSimpleCheckpointingLambdaFoam/pitzDaily
+#  ./Alltest
+#)
+#  echo "Skipping tests"
+#fi
+
+(
+  cd applications/discreteAdjointOpenFOAM/test/pitzDaily
+  ./Allrun
+  ./Allrun.parallel
+)

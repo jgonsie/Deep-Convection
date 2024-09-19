@@ -1,0 +1,24 @@
+#!/bin/bash
+# rudimentary test script, needs error checking
+
+echo "##############################################################################################"
+echo "#                                                                                            #"
+echo "# applications/discreteAdjointOpenFOAM/experimental/piggyShapeSimpleFoam/cylinderMirror      #"
+echo "#                                                                                            #"
+echo "##############################################################################################"
+
+./Allclean > /dev/null
+echo "buildApps" && ./buildApps.sh > buildApps.log 2>&1
+echo "blockMesh" && blockMesh > blockMesh.log 2>&1
+echo "mirrorMesh" && mirrorMesh -overwrite > mirrorMesh.log
+rm -f 0
+cp -r 0.org 0
+echo "potentialFoam" && potentialFoam -writePhi > potentialFoam.log
+echo "piggyShapeSimpleFoam" && piggyShapeSimpleFoam > piggyShapeSimpleFoam.log
+
+grep "final iter" piggyShapeSimpleFoam.log
+grep "ExecutionTime" piggyShapeSimpleFoam.log | tail -n 1
+
+exit 0
+
+#------------------------------------------------------------------------------

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+wmake $FOAM_UTILITIES/mesh/generation/blockMesh
+wmake $FOAM_UTILITIES/mesh/manipulation/splitMeshRegions
+wmake $FOAM_UTILITIES/mesh/manipulation/createPatch
+wmake $FOAM_SOLVERS/heatTransfer/chtMultiRegionFoam/chtMultiRegionSimpleFoam
+
+MESH_LVL=20
+
+m4 -P -Dlvl=$MESH_LVL  system/blockMeshDict.m4 > system/blockMeshDict
+blockMesh | tee blockMesh.log
+rm -rf 0
+cp -r 0.org 0
+
+splitMeshRegions -cellZonesOnly -overwrite
+rm -rf constant/polyMesh
+
+createPatch -region solid -overwrite
+createPatch -region fluid -overwrite
+
+chtMultiRegionSimpleFoam
+
+#postProcess -region fluid -latestTime -func "patchAverage(T,name=outlet)" | grep "areaAverage("
+#postProcess -region solid -latestTime -func "patchAverage(T,name=solid_heated_wall)" | grep "areaAverage("
+
+touch foam.foam
+
+#------------------------------------------------------------------------------

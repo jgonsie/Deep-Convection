@@ -1,0 +1,14 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+# Create mesh
+runApplication -s solid blockMesh -region solid
+
+# create dummy files for post-processing
+paraFoam -touch -region solid
+
+restore0Dir
+
+#------------------------------------------------------------------------------

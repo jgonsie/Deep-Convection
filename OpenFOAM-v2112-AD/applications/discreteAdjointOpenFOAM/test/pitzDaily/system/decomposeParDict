@@ -1,0 +1,18 @@
+
+// * * * * * * * * * //
+FoamFile
+{
+	version 0.5;
+	format ascii;
+	root "ROOT";
+	case "CASE";
+	class dictionary;
+	object nix;
+}
+method simple;
+numberOfSubdomains 4;
+simpleCoeffs
+{
+  delta 0.0001;
+  n (2 2 1);
+}

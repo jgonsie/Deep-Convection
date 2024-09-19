@@ -1,0 +1,5 @@
+#! /bin/bash
+
+blockMesh
+cp -r 0.org 0
+adjointSimpleCheckpointingFoam

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+blockMesh > blockMesh.log
+rm -rf 0
+cp -r 0.org 0
+potentialFoam -writePhi > tee potentialFoam.log
+
+foamDictionary -entry startTime -set 0   system/controlDict > /dev/null
+foamDictionary -entry endTime   -set 200 system/controlDict > /dev/null
+echo "200 steps of passive simpleFoam: $(simpleFoam | tee simpleFoam.log | grep "ExecutionTime" | tail -n 1)"
+
+if [ "$DAOF_AD_MODE" = "A1S" ]; then
+  foamDictionary -entry startTime -set 200 system/controlDict > /dev/null
+  foamDictionary -entry endTime   -set 250 system/controlDict > /dev/null
+  echo "50 steps of adjointSimpleCheckpointingLambdaFoam (50 checkpoints): $(adjointSimpleCheckpointingLambdaFoam | tee adjointSimpleCheckpointingLambdaFoam.log | grep "ExecutionTime" | tail -n 1)"
+fi
+
+touch foam.foam
+
+#------------------------------------------------------------------------------

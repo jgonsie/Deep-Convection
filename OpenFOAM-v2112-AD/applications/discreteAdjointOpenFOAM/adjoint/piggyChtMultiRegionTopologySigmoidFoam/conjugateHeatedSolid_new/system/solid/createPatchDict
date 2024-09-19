@@ -1,0 +1,36 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1812                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      createPatchDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+pointSync false;
+
+patches
+(
+    {
+        name solid_to_fluid;
+        patchInfo
+        {
+            type            mappedWall;
+            sampleMode      nearestPatchFace;
+            sampleRegion    fluid;
+            samplePatch     fluid_to_solid;
+        }
+
+        constructFrom patches;
+        patches (fluid_to_solid);
+    }
+);
+
+// ************************************************************************* //

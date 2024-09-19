@@ -1,0 +1,37 @@
+#!/bin/bash
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+./Allclean
+cp -r 0.org 0
+foamDictionary -disableFunctionEntries -entry lvl -set 1 system/blockMeshDict
+runApplication -s $WM_OPTIONS blockMesh
+runApplication -s $WM_OPTIONS potentialFoam -writephi -writep
+
+if [ "$DAOF_AD_MODE" = "Passive" ]; then
+  runApplication -s $WM_OPTIONS simpleFoam
+
+  TIME=$(grep "ExecutionTime" log.simpleFoam.$WM_OPTIONS | tail -n 1 | awk '{print $3}')
+  echo "simpleFoam.$WM_OPTIONS $TIME" > stats.$WM_OPTIONS
+fi
+if [ "$DAOF_AD_MODE" = "A1S" ]; then
+  runApplication -s $WM_OPTIONS simpleFoam
+  runApplication -s $WM_OPTIONS adjointSimpleCheckpointingLambdaFoam
+
+  TIME_A1S_PASSIVE=$(grep "ExecutionTime" log.simpleFoam.$WM_OPTIONS | tail -n 1 | awk '{print $3}')
+  TIME_A1S=$(grep "ExecutionTime" log.adjointSimpleCheckpointingLambdaFoam.$WM_OPTIONS | tail -n 1 | awk '{print $3}')
+
+  echo "simpleFoam.$WM_OPTIONS $TIME_A1S_PASSIVE" > stats.$WM_OPTIONS
+  echo "adjointSimpleCheckpointingLambdaFoam.$WM_OPTIONS $TIME_A1S" >> stats.$WM_OPTIONS
+fi
+if [ "$DAOF_AD_MODE" = "T1S" ]; then
+  runApplication -s $WM_OPTIONS simpleFoam
+  runApplication -s $WM_OPTIONS t1sSimpleFoam
+
+  TIME_T1S_PASSIVE=$(grep "ExecutionTime" log.simpleFoam.$WM_OPTIONS | tail -n 1 | awk '{print $3}')
+  TIME_T1S=$(grep "ExecutionTime" log.t1sSimpleFoam.$WM_OPTIONS | tail -n 1 | awk '{print $3}')
+
+  echo "simpleFoam.$WM_OPTIONS $TIME_T1S_PASSIVE" > stats.$WM_OPTIONS
+  echo "t1sSimpleFoam.$WM_OPTIONS $TIME_T1S" >> stats.$WM_OPTIONS
+fi

@@ -1,0 +1,26 @@
+Sens
+{
+  expr "deriv (%f%) %f%";
+  name Sens;
+  theTitle "Sensitivity";
+  titles ( sens );
+  type regular;
+}
+
+Res
+{
+  expr "deriv %f% (%f%)";
+  name Res;
+  theTitle "Residual";
+  titles ( residual );
+  type regular;
+  logscale true;
+}
+
+//AddToTemps1
+//{
+//  expr "areaAverage\(fluid_to_solid\) of T = (%f%)";
+//  titles ( fluid_to_solid );
+//  type slave;
+//  master Temps;
+//}

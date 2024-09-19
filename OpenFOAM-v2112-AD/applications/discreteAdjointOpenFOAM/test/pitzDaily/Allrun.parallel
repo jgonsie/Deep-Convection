@@ -1,0 +1,42 @@
+#!/bin/bash
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+./Allclean
+
+cp -r 0.org 0
+foamDictionary -disableFunctionEntries -entry lvl -set 2 system/blockMeshDict
+blockMesh
+potentialFoam -writephi -writep
+
+decomposePar
+
+if [ "$DAOF_AD_MODE" = "Passive" ]; then
+  runParallel -s $WM_OPTIONS simpleFoam
+
+  TIME=$(grep "ExecutionTime" log.simpleFoam.${WM_OPTIONS} | tail -n 1 | awk '{print $3}')
+  echo "simpleFoam.${WM_OPTIONS}_parallel $TIME" > stats.${WM_OPTIONS}_parallel
+fi
+if [ "$DAOF_AD_MODE" = "A1S" ]; then
+  runParallel -s $WM_OPTIONS simpleFoam
+  runParallel -s $WM_OPTIONS adjointSimpleCheckpointingLambdaFoam
+  mpirun -np 4 adjointSimpleCheckpointingLambdaFoam -parallel
+
+  TIME_A1S_PASSIVE=$(grep "ExecutionTime" log.simpleFoam.$WM_OPTIONS | tail -n 1 | awk '{print $3}')
+  TIME_A1S=$(grep "ExecutionTime" log.adjointSimpleCheckpointingLambdaFoam.$WM_OPTIONS | tail -n 1 | awk '{print $3}')
+
+  echo "simpleFoam.${WM_OPTIONS}_parallel $TIME_A1S_PASSIVE" > stats.${WM_OPTIONS}_parallel
+  echo "adjointSimpleCheckpointingLambdaFoam.${WM_OPTIONS}_parallel $TIME_A1S" >> stats.${WM_OPTIONS}_parallel
+
+fi
+if [ "$DAOF_AD_MODE" = "T1S" ]; then
+  runParallel -s $WM_OPTIONS simpleFoam
+  runParallel -s $WM_OPTIONS t1sSimpleFoam
+
+  TIME_T1S_PASSIVE=$(grep "ExecutionTime" log.simpleFoam.$WM_OPTIONS | tail -n 1 | awk '{print $3}')
+  TIME_T1S=$(grep "ExecutionTime" log.t1sSimpleFoam.$WM_OPTIONS | tail -n 1 | awk '{print $3}')
+
+  echo "simpleFoam.${WM_OPTIONS}_parallel $TIME_T1S_PASSIVE" > stats.${WM_OPTIONS}_parallel
+  echo "t1sSimpleFoam.${WM_OPTIONS_parallel} $TIME_T1S" >> stats.${WM_OPTIONS}_parallel
+fi

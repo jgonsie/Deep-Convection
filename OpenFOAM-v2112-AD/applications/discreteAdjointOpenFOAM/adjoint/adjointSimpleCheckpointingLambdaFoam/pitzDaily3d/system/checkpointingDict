@@ -1,0 +1,48 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.4                                   |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version 2.0;
+    format ascii;
+
+    root "..";
+    case "multiDuct_opt";
+    instance "system";
+    local "";
+
+    class dictionary;
+    object checkpointDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+checkpointSettings{
+    checkpointingMethod	dummy; // equidistant, revolve or none
+	nCheckpoints    1; // does not apply here
+    nTapeSteps	    1; // does not apply here
+    reverseAccumulation no;//yes;
+}
+
+
+checkpointRequired    
+{
+    U;
+    p;
+    phi;
+    epsilon;
+    f;
+    k;
+    nut;
+    nuTilda;
+    omega;
+    v2;
+}
+
+
+// ************************************************************************* //

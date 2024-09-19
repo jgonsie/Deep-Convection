@@ -1,0 +1,19 @@
+#!/bin/bash
+
+blockMesh | tee blockMesh.log
+rm -f 0
+cp -r 0.org 0
+potentialFoam -writePhi | tee potentialFoam.log
+
+foamDictionary -entry startTime -set 0   system/controlDict
+foamDictionary -entry endTime   -set 200 system/controlDict
+simpleFoam | tee simpleFoam.log
+
+foamDictionary -entry startTime -set 200 system/controlDict
+foamDictionary -entry endTime   -set 210 system/controlDict
+
+adjointSimpleFoam | tee adjointSimpleFoam.log
+
+touch foam.foam
+
+#------------------------------------------------------------------------------

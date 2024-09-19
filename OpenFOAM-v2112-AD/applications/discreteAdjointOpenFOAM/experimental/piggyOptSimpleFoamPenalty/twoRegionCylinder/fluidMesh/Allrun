@@ -1,0 +1,10 @@
+#!/bin/bash
+
+blockMesh | tee blockMesh.log
+mirrorMesh -overwrite | tee mirrorMesh.log
+rm -rf 0
+cp -r 0.org 0
+potentialFoam -writePhi | tee potentialFoam.log
+piggyShapeSimpleFoam | tee piggyShapeSimpleFoam.log
+
+#------------------------------------------------------------------------------

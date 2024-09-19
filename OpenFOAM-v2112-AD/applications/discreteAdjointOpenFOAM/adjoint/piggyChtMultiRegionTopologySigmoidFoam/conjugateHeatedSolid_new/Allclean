@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cd ${0%/*} || exit 1   # Run from this directory
+
+. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+
+
+rm -rf 0  rm -rf 0 > /dev/null 2>&1
+rm -rf constant/solid/polyMesh constant/fluid/polyMesh > /dev/null 2>&1
+rm  constant/cellToRegion > /dev/null 2>&1
+rm -rf *.log
+rm -rf postProcessing
+cleanCase

@@ -1,0 +1,34 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+mkdir -p constant
+
+cp -rf \
+    "$FOAM_TUTORIALS"/resources/geometry/motorBike_leakDetection \
+    constant/triSurface
+
+# Alternative decomposeParDict name:
+decompDict="-decomposeParDict system/decomposeParDict.6"
+## Standard decomposeParDict name:
+# unset decompDict
+
+runApplication surfaceFeatureExtract
+
+runApplication blockMesh
+
+runApplication $decompDict decomposePar
+
+# Using distributedTriSurfaceMesh?
+if foamDictionary -entry geometry -value system/snappyHexMeshDict | \
+   grep -q distributedTriSurfaceMesh
+then
+    runParallel $decompDict surfaceRedistributePar motorBike.obj independent
+fi
+
+runParallel $decompDict snappyHexMesh -overwrite
+
+runParallel $decompDict checkMesh -writeFields '(nonOrthoAngle)' -constant
+
+#------------------------------------------------------------------------------

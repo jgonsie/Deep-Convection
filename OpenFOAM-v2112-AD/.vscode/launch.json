@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "gdb debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${env:FOAM_APPBIN}/chtMultiRegionSimpleSigmoidFoam"
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${env:WM_PROJECT_DIR}/applications/discreteAdjointOpenFOAM/experimental/chtMultiRegionSimpleSigmoidFoam/case_fluid_solid",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb"
+        }
+    ]
+}

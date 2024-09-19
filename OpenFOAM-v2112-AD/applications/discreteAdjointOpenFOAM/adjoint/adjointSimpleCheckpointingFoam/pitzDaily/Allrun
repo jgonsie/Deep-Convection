@@ -1,0 +1,11 @@
+#!/bin/bash
+
+blockMesh | tee blockMesh.log
+rm -f 0
+cp -r 0.org 0
+potentialFoam -writePhi | tee potentialFoam.log
+adjointSimpleCheckpointingFoam | tee adjointSimpleCheckpointingFoam.log
+
+touch foam.foam
+
+#------------------------------------------------------------------------------

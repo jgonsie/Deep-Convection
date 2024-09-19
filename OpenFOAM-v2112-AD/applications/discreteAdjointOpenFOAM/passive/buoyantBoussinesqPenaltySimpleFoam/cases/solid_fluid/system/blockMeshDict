@@ -1,0 +1,160 @@
+
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.7.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+verbose no;
+scale 0.001;
+
+x0 -31;
+x1 -11;
+x2 11;
+x3 51;
+
+y0 0;
+y1 10;
+y2 -3;
+
+z0  8.25;
+z1 -8.25;
+
+vertices
+(
+  ($x0 $y0 $z0)   // 0
+  ($x1 $y0 $z0)   // 1
+  ($x2 $y0 $z0)   // 2
+  ($x3 $y0 $z0)   // 3
+//
+  ($x0 $y1 $z0)   // 4
+  ($x1 $y1 $z0)   // 5
+  ($x2 $y1 $z0)   // 6
+  ($x3 $y1 $z0)   // 7
+//
+  ($x1 $y2 $z0)   // 8
+  ($x2 $y2 $z0)   // 9
+//////
+  ($x0 $y0 $z1)   // 10
+  ($x1 $y0 $z1)   // 11
+  ($x2 $y0 $z1)   // 12
+  ($x3 $y0 $z1)   // 13
+//
+  ($x0 $y1 $z1)   // 14
+  ($x1 $y1 $z1)   // 15
+  ($x2 $y1 $z1)   // 16
+  ($x3 $y1 $z1)   // 17
+//
+  ($x1 $y2 $z1)   // 18
+  ($x2 $y2 $z1)   // 19
+);
+
+lvl 1;
+
+blocks
+(
+    hex (0 1 11 10 4 5 15 14)   fluid  ( 20 32 10 ) simpleGrading (1 1 1)
+    hex (1 2 12 11 5 6 16 15)   fluid  ( 22 32 10 ) simpleGrading (1 1 1)
+    hex (2 3 13 12 6 7 17 16)   fluid  ( 40 32 10 ) simpleGrading (1 1 1)
+    hex (8 9 19 18 1 2 12 11)   solid  ( 22 32  3 ) simpleGrading (1 1 1)
+);
+
+defaultPatch
+{
+    name    walls;
+    type    wall;
+}
+
+boundary
+(
+    inlet
+    {
+      type            patch;
+    
+      faces
+      (
+        (0 10 14 4)
+      );
+    }
+
+    outlet
+    {
+      type            patch;
+    
+      faces
+      (
+        (7 3 13 17)
+      );
+    }
+
+    bottom
+    {
+      type            patch;
+    
+      faces
+      (
+        (8 9 19 18)
+      );
+    }
+
+    /*
+    fluid_walls
+    {
+      type            wall;
+    
+      faces
+      (
+        (0 1 9 8)
+      );
+    }
+
+    solid_walls
+    {
+      type            wall;
+    
+      faces
+      (
+        (4 6 14 12)
+        (6 7 15 14)
+        (7 5 13 15)
+      );
+    }
+
+    fluid_to_solid
+    {
+      type            mappedWall;
+      sampleMode      nearestPatchFace;
+      sampleRegion    solid;
+      samplePatch     solid_to_fluid;
+    
+      faces
+      (
+        (2 3 11 10)
+      );
+    }
+
+    solid_to_fluid
+    {
+      type            mappedWall;
+      sampleMode      nearestPatchFace;
+      sampleRegion    fluid;
+      samplePatch     fluid_to_solid;
+    
+      faces
+      (
+        (5 4 12 13)
+      );
+    }*/
+);
+
+// ************************************************************************* //

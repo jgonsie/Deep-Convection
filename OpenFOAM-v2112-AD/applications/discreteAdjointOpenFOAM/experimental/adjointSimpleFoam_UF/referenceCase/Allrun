@@ -1,0 +1,18 @@
+#!/bin/bash
+
+MESH_LVL=6
+
+m4 -P -Dlvl=$MESH_LVL  system/blockMeshDict.m4 > system/blockMeshDict
+blockMesh | tee blockMesh.log
+rm -f 0
+cp -r 0.org 0
+
+# initialize solution
+simpleFoam
+
+# calculate the Jacobian of one timestep
+adjointSimpleFoam_UF
+
+touch foam.foam
+
+#------------------------------------------------------------------------------

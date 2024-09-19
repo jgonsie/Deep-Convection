@@ -1,0 +1,110 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  dev                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+SDLS yes;
+
+solvers
+{
+    "(p_rgh.*)"
+    {
+        solver          GAMG;
+        tolerance       1e-06;
+        //relTol          0.01;
+        smoother        DIC; //DICGaussSeidel;
+        nPreSweeps      0;
+        nPostSweeps     2;
+        cacheAgglomeration on;
+        agglomerator    faceAreaPair;
+        nCellsInCoarsestLevel 256;
+        mergeLevels     1;
+        minIter 5;
+        //maxIter         50;
+        SDLS $SDLS;
+    }
+
+    "(e|eReverse)"
+    {
+        solver          GAMG;
+        preconditioner  banana;
+        smoother        DILU;
+        tolerance       1e-5;
+        //relTol          0.1;
+        SDLS $SDLS;
+    }
+
+    "(U|h|k|epsilon|omega|G|Ii|rho)"
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-06;
+        maxIter 5000;
+        minIter 5;
+        //relTol          0.01;
+        SDLS $SDLS;
+    }
+    
+    "(U|h|k|omega|G|Ii|rho)Reverse"
+    {
+        $U;
+    }
+
+    "(G|GReverse)"
+    {
+        $p_rgh;
+        tolerance       1e-05;
+        minIter 5;
+        //relTol          0.01;
+        SDLS $SDLS;
+    }
+}
+
+SIMPLE
+{
+    momentumPredictor yes;
+    nNonOrthogonalCorrectors 0;
+    pRefCell        0;
+    pRefValue       100000;
+    rhoMin          0.5;
+    rhoMax          1.5;
+    cost1   -1;
+    cost2   1;
+    optStepwidth 0.0001;
+}
+
+relaxationFactors
+{
+    fields
+    {
+        rho             1.0;
+        p_rgh           0.7;
+    }
+    equations
+    {
+        U               0.5;
+        h               0.6;
+        "(k|epsilon|omega)" 0.7;
+        G               0.7;
+        "ILambda.*"     0.7;
+        qr              0.7;
+    }
+}
+
+potentialFlow
+{
+    nNonOrthogonalCorrectors 10;
+}
+
+// ************************************************************************* //

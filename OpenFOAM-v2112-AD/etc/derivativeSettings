@@ -1,0 +1,93 @@
+#! /bin/bash
+#----------------------------------*-sh-*--------------------------------------
+# =========                 |
+# \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+#  \\    /   O peration     |
+#   \\  /    A nd           | Copyright (C) 2011-2013 OpenFOAM Foundation
+#    \\/     M anipulation  |
+#------------------------------------------------------------------------------
+# License
+#     This file is part of OpenFOAM.
+#
+#     OpenFOAM is free software: you can redistribute it and/or modify it
+#     under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     OpenFOAM is distributed in the hope that it will be useful, but WITHOUT
+#     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+#     FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+#     for more details.
+#
+#     You should have received a copy of the GNU General Public License
+#     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
+#
+# File
+#     config/example/prefs.sh
+#
+# Description
+#     Preset variables for the OpenFOAM configuration - POSIX shell syntax.
+#
+#     The prefs.sh file will be sourced by the OpenFOAM etc/bashrc when it is
+#     found by foamEtcFile.
+#
+# See Also
+#     'foamEtcFile -help' or 'foamEtcFile -list' for information about the
+#     paths searched
+#
+#------------------------------------------------------------------------------
+
+if [ -z ${DAOF_AD_MODE} ]; then
+    echo "No AD option set, using default DAOF_AD_MODE=A1S";
+    export DAOF_AD_MODE=A1S
+fi
+
+if [ -z ${DAOF_COMPILER} ]; then
+    echo "No DAOF_COMPILER set, using gcc";
+    export DAOF_COMPILER=Gcc
+fi
+
+if [ -z ${DAOF_AD_TOOL} ]; then
+    export DAOF_AD_TOOL=DCO_FOAM
+fi
+
+# Opt, Debug or Prof
+if [ -z ${DAOF_COMPILE_OPTION} ]; then
+    export DAOF_COMPILE_OPTION=Opt
+fi
+WM_COMPILE_OPTION=$DAOF_COMPILE_OPTION
+
+# Gcc, Icc or Clang
+WM_COMPILER=$DAOF_COMPILER
+
+if [ -z ${DAOF_BUILD_PROCS} ]; then
+    export DAOF_BUILD_PROCS=8
+fi
+#if [ "$DAOF_BUILD_PROCS" -gt 1 ]; then
+#    export WM_NCOMPPROCS="$DAOF_BUILD_PROCS"
+#    echo "Setting up wmake for $DAOF_BUILD_PROCS processors"
+#fi
+
+export DAOF_AD_FLAGS="-DDAOF_AD_MODE_$DAOF_AD_MODE -DDAOF_AD_TOOL_$DAOF_AD_TOOL"
+
+if [ "$WM_COMPILE_OPTION" = "Debug" ]; then
+    export DAOF_AD_FLAGS="$DAOF_AD_FLAGS -DDCO_DEBUG"
+fi
+
+if [ "$DAOF_AD_TOOL" = "DCO_CPP_DEV" ]; then
+    export DAOF_AD_FLAGS="$DAOF_AD_FLAGS -I $WM_PROJECT_DIR/dco_cpp_dev/src"
+fi
+if [ "$DAOF_AD_TOOL" = "CODI" ]; then
+    export DAOF_AD_FLAGS="$DAOF_AD_FLAGS -I $WM_PROJECT_DIR/CoDiPack/include"
+fi
+
+DAOF_EXPORT_TO_MPI="-x DAOF_AD_MODE -x DAOF_COMPILER -x DAOF_COMPILE_OPTION -x DAOF_MACHINE"
+
+export FOAM_EXTRA_CXXFLAGS="$DAOF_AD_FLAGS $FOAM_EXTRA_CXXFLAGS"
+
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+echo "Discrete Adjoint Environment:"
+env | grep "^DAOF_" --color=never
+
+# ----------------------------------------------------------------- end-of-file

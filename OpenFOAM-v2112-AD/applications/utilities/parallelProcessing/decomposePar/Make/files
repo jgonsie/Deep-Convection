@@ -1,0 +1,13 @@
+decomposePar.C
+
+domainDecomposition.C
+domainDecompositionMesh.C
+domainDecompositionDistribute.C
+domainDecompositionWrite.C
+
+domainDecompositionDryRun.C
+domainDecompositionDryRunWrite.C
+
+lagrangianFieldDecomposer.C
+
+EXE = $(FOAM_APPBIN)/decomposePar

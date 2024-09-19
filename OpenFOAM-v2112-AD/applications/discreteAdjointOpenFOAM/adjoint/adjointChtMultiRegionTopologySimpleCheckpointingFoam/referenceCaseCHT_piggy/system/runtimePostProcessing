@@ -1,0 +1,173 @@
+postPro1
+{
+    type            runTimePostProcessing;
+    libs            ("librunTimePostProcessing.so");
+    writeControl    onEnd;
+    output
+    {
+        name            U;
+        width           2000;
+        height          1200;
+    }
+    camera
+    {
+        // If camera is moving, optionally provide start and end times
+        // startPosition    0.2;
+        // endPosition      0.75;
+
+        // Total number of frames to generate
+        nFrameTotal         1;
+
+        // Parallel projection flag
+        parallelProjection  yes;
+
+        //clipBox         (-0.2 -0.2 0)(1.65 0.2 1.25); // optional
+
+        focalPoint      (2.5 2.5 0.5);
+        up              (0 1 0);
+        position        (2.5 2.5 14.29);
+        viewAngle       30;
+        zoom            0.33;
+    }
+
+    // Default colours
+    // - If select to colourBy colour, these values are used unless
+    // they are locally overriden
+    colours
+    {
+        background      (1 1 1);
+        background2     (1 1 1);
+        text            (0 0 0);
+        edge            (1 0 0);
+        surface         (0.5 0.5 0.5);
+        line            (1 0 0);
+    }
+    // Surface data
+    surfaces
+    {
+        cuttingPlane1
+        {
+            type            functionObjectSurface;
+            functionObject  cuttingPlane;
+            colourMap       blueWhiteRed;
+            representation  surface;
+            maxGlyphLength  0.1;
+            visible         yes;
+            featureEdges    no;
+            colourBy        field;
+            field           U;
+            range           (0 150);
+            opacity         1;
+            scalarBar 
+            { 
+                visible            yes; 
+                position           (0.8 0.1); 
+                vertical           yes;
+                fontSize           12; 
+                title              "velocity / [m/s]"; 
+                labelFormat        "%6.2f"; 
+                numberOfLabels     5; 
+            }
+         }
+    }
+
+    // Text data
+    text
+    {
+        text1
+        {
+            string          "Angled Duct";
+            position        (0.1 0.75);
+            size            72;
+            bold            yes;
+            visible         yes;
+        }
+    }
+}
+
+postPro2
+{
+    type            runTimePostProcessing;
+    libs            ("librunTimePostProcessing.so");
+    writeControl    writeTime;
+    output
+    {
+        name            sens;
+        width           2000;
+        height          1200;
+    }
+    camera
+    {
+        // If camera is moving, optionally provide start and end times
+        // startPosition    0.2;
+        // endPosition      0.75;
+
+        // Total number of frames to generate
+        nFrameTotal         1;
+
+        // Parallel projection flag
+        parallelProjection  yes;
+
+        //clipBox         (-0.2 -0.2 0)(1.65 0.2 1.25); // optional
+
+        focalPoint      (2.5 2.5 0.5);
+        up              (0 1 0);
+        position        (2.5 2.5 14.29);
+        viewAngle       30;
+        zoom            0.33;
+    }
+
+    // Default colours
+    // - If select to colourBy colour, these values are used unless
+    // they are locally overriden
+    colours
+    {
+        background      (1 1 1);
+        background2     (1 1 1);
+        text            (0 0 0);
+        edge            (1 0 0);
+        surface         (0.5 0.5 0.5);
+        line            (1 0 0);
+    }
+    // Surface data
+    surfaces
+    {
+        cuttingPlane1
+        {
+            type            functionObjectSurface;
+            functionObject  cuttingPlane;
+            colourMap       blueWhiteRed;
+            representation  surface;
+            maxGlyphLength  0.1;
+            visible         yes;
+            featureEdges    no;
+            colourBy        field;
+            field           sens;
+            range           (-300 18000);
+            opacity         1;
+            scalarBar 
+            { 
+                visible            yes; 
+                position           (0.8 0.1); 
+                vertical           yes;
+                fontSize           12; 
+                title              "sensitivity"; 
+                labelFormat        "%6.2f"; 
+                numberOfLabels     5; 
+            }
+         }
+    }
+
+    // Text data
+    text
+    {
+        text1
+        {
+            string          "Angled Duct";
+            position        (0.1 0.75);
+            size            72;
+            bold            yes;
+            visible         yes;
+        }
+    }
+}

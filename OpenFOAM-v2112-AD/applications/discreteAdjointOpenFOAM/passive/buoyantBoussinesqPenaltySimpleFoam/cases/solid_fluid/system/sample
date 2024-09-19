@@ -1,0 +1,75 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    location        "system";
+    object          sample;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+type sets;
+libs            (sampling);
+
+interpolationScheme cellPointFace;
+
+setFormat raw;
+
+sets
+(
+    x0.0
+    {
+        type            uniform; //face;
+        nPoints         100;
+        axis            z;
+        start           (0.00 5e-3 -8.25e-3);
+        end             (0.00 5e-3  8.25e-3);
+    }
+    x0.012
+    {
+        type            uniform; //face;
+        nPoints         100;
+        axis            z;
+        start           (0.012 5e-3 -8.25e-3);
+        end             (0.012 5e-3  8.25e-3);
+    }
+    x0.05
+    {
+        type            uniform; //face;
+        nPoints         100;
+        axis            z;
+        start           (0.05 5e-3 -8.25e-3);
+        end             (0.05 5e-3  8.25e-3);
+    }
+    lengthwise
+    {
+        type            face; //face;
+        axis            x;
+        start           (-1 5e-3 0);
+        end             ( 1 5e-3 0);
+    }
+    heightwise
+    {
+        type            face; //face;
+        axis            y;
+        start           (0 -1 0);
+        end             (0  1 0);
+    }
+);
+
+fields
+(
+    T
+    U
+);
+
+
+// ************************************************************************* //

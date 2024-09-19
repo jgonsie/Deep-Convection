@@ -1,0 +1,40 @@
+#!/bin/bash
+
+rm -f sens.*
+
+(
+./Allclean > /dev/null
+foamDictionary -entry checkpointSettings/checkpointingMethod -set none system/checkpointingDict
+./Allrun > /dev/null
+cp 100/sens sens.blackBox
+)
+
+(
+./Allclean > /dev/null
+foamDictionary -entry checkpointSettings/checkpointingMethod -set equidistant system/checkpointingDict
+./Allrun > /dev/null
+cp 100/sens sens.equidistant
+)
+
+(
+./Allclean > /dev/null
+foamDictionary -entry checkpointSettings/checkpointingMethod -set revolve system/checkpointingDict
+./Allrun > /dev/null
+cp 100/sens sens.revolve
+)
+
+(
+mkdir -p 1
+cp sens.* 1/
+postProcess -funcs "(subtract(sens.blackBox,sens.equidistant) \
+                     mag(subtract(sens.blackBox,sens.equidistant)) \
+                     minMaxMagnitude(mag(subtract(sens.blackBox,sens.equidistant))))" -time 1 | grep "max(mag(subtract"
+
+postProcess -funcs "(subtract(sens.blackBox,sens.revolve) \
+                     mag(subtract(sens.blackBox,sens.revolve)) \
+                     minMaxMagnitude(mag(subtract(sens.blackBox,sens.revolve))))" -time 1 | grep "max(mag(subtract"
+
+postProcess -funcs "(subtract(sens.revolve,sens.equidistant) \
+                     mag(subtract(sens.revolve,sens.equidistant)) \
+                     minMaxMagnitude(mag(subtract(sens.revolve,sens.equidistant))))" -time 1 | grep "max(mag(subtract"
+)

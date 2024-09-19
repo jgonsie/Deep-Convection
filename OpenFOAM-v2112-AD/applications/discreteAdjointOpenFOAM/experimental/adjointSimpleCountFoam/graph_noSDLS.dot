@@ -1,0 +1,30 @@
+digraph finite_state_machine {
+    {rank = min; U_in p_in phi_in}
+    {rank = max; U_out p_out phi_out}
+// Nodes
+    UEqn     [label="UEqn\n6.51%"]
+    fullUEqn [label="fullUEqn\n0.52%"]
+    U1       [label="U1\n16.45%"]
+    rAU      [label="rAU\n0.03%"]
+    HbyA     [label="HbyA\n0.69%"]
+    phiHbyA  [label="phiHbyA\n0.36%"]
+    pEqn     [label="pEqn\n1.18%"]
+    p1       [label="p1\n73.63%"]
+    phi1     [label="phi1\n0.14%"]
+    U2       [label="U2\n0.51%"]
+    
+// Edges
+    U_in -> UEqn phi_in -> UEqn
+    UEqn -> fullUEqn p_in -> fullUEqn
+    fullUEqn -> U1
+    UEqn -> rAU
+    rAU -> HbyA UEqn -> HbyA U1 -> HbyA p_in -> HbyA
+    HbyA -> phiHbyA U1 -> phiHbyA p_in -> phiHbyA
+    rAU -> pEqn U1 -> pEqn phiHbyA -> pEqn
+    pEqn -> p1
+    phiHbyA -> phi1 pEqn -> phi1
+    HbyA -> U2 rAU -> U2 p1 -> U2
+    U2 -> U_out
+    p1 -> p_out
+    phi1 -> phi_out
+}

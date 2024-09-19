@@ -1,0 +1,17 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+rm -rf 0
+cp -r 0.org 0
+
+blockMesh
+setFields # initialize porosity field alpha
+
+buoyantBoussinesqPenaltySimpleFoam
+
+postProcess -time '1000,2000' -func sample
+gnuplot plot.gp
+
+#------------------------------------------------------------------------------
