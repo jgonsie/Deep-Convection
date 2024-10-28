@@ -22,15 +22,19 @@ np.random.seed(42)
 
 #%% UPLOAD CASE AND DATA
 
-# Absolute paths for WS
+# Absolute paths using linux
+# Here you should modify the paths '/home/jgonzalez/Desktop/cases/...' and '/home/jgonzalez/OpenFOAM' with your current paths
 running_directory_DC = '/home/jgonzalez/Desktop/cases/training/baseCase_DC_x8'
 classic_solver_path = '/home/jgonzalez/OpenFOAM/OpenFOAM-v2112-Adjoint/platforms/linux64GccDPInt64OptA1SDCO_FOAM/bin/pimpleFoamSMfinal'
 classic_running_directory = '/home/jgonzalez/Desktop/cases/training/baseCase'
 OFcaller_path = '/home/jgonzalez/Desktop/cases/OFcaller/libOFcallerfinal.so' 
 OF_solver_path = '/home/jgonzalez/OpenFOAM/OpenFOAM-v2112-Adjoint/platforms/linux64GccDPInt64OptA1SDCO_FOAM/bin/myPimpleADDCFinal'
 OF_solver_AD_path = '/home/jgonzalez/OpenFOAM/OpenFOAM-v2112-Adjoint/platforms/linux64GccDPInt64OptA1SDCO_FOAM/bin/myPimpleVJPDCFinal'
+data_path_coarse = '/home/jgonzalez/Desktop/cases/mycase_coarse_x8' 
+data_path_fine = '/home/jgonzalez/Desktop/cases/mycase_fine_full'
 
-# Absolute paths for MSI
+# Absolute paths using WSL and Windows
+# Here you should modify the paths '/mnt/c/Users/jgs_j/Desktop/cases/...' and '/home/jesusglezs97/OpenFOAM/' with your current paths
 running_directory_DC = '/mnt/c/Users/jgs_j/Desktop/cases/training/baseCase_DC_x8'
 classic_solver_path = '/home/jesusglezs97/OpenFOAM/OpenFOAM-v2112-Adjoint-v2/platforms/linux64GccDPInt64OptA1SDCO_FOAM/bin/pimpleFoamSMfinal'
 classic_running_directory = '/mnt/c/Users/jgs_j/Desktop/cases/training/baseCase'
